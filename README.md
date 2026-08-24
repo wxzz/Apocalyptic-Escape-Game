@@ -2,6 +2,12 @@
 
 本文档为《末日突围》全维度游戏指南，包含游戏模式、按键操作、战术技巧、武器逻辑、界面释义、核心规则、游玩注意事项，新手、老手均可快速查阅使用。
 
+## 下载地址
+- 网盘：链接: https://pan.baidu.com/s/1-FNyggbGuJ3xxRkWBBkKOw?pwd=v2nu 提取码: v2nu
+
+## 视频演示
+- 视频：https://www.bilibili.com/video/BV1XDhK6nECm/
+
 ## 📑 目录
 - 一、游戏模式详解
 - 二、移动与视角控制
