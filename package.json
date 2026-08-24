@@ -1,0 +1,35 @@
+{
+  "dependencies": {
+    "@gltf-transform/core": "^4.4.2",
+    "@gltf-transform/extensions": "^4.4.2",
+    "@gltf-transform/functions": "^4.4.2",
+    "acorn": "^8.18.0",
+    "ndarray-pixels": "^5.2.0",
+    "three": "^0.160.0"
+  },
+  "name": "dead-ahead-zombie-warfare",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron .",
+    "dist": "electron-builder"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^43.3.0",
+    "electron-builder": "^26.15.3"
+  },
+  "description": "",
+  "build": {
+    "appId": "dead-ahead-zombie-warfare", 
+    "productName": "dead-ahead-zombie-warfare",
+    "electronDist": "node_modules/electron/dist",
+    "win": {
+      "target": "portable", 
+      "icon": "favicon.ico"
+    }
+  }
+}

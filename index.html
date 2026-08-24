@@ -1,0 +1,155 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>末日突围 - 第一人称战术射击</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="gameLayer"></div>
+<div id="css2d"></div>
+<div id="hud">
+  <div id="compass"><div id="compassTicks"></div><div id="compassNeedle"></div><div id="compassN"></div></div>
+  <div id="hpWrap">
+    <div id="hpLabel">HP: <span id="hpText">100/100</span></div>
+    <div id="hpBar"><div id="hpFill"></div></div>
+    <div id="staminaWrap"><div id="staminaFill"></div></div>
+  </div>
+  <div id="ammoWrap">
+    <div id="ammoNum">15 <span class="inf">/ &infin;</span></div>
+    <div id="ammoState"></div>
+    <div id="reloadBar"><div id="reloadFill"></div></div>
+  </div>
+  <div id="interactHint"></div>
+  <div id="breathBar"><i></i></div>
+  <div id="weaponIcon">&#x1F52B;</div>
+  <div id="topRight"><div id="scoreText">击杀: 0</div><div id="waveText">波次: 1</div></div>
+  <div id="waveBanner">第 1 波</div>
+  <div id="boss-hp-container" style="display:none;"><div id="bossHpBar"><div id="bossHpFill"></div></div><div id="bossHpText">Boss：10000/10000</div></div>
+  <div id="minionCount" style="display:none;">剩余小兵：0</div>
+
+  <div id="crosshair">
+    <div class="chLine" id="chTop"></div><div class="chLine" id="chBot"></div>
+    <div class="chLine" id="chLef"></div><div class="chLine" id="chRig"></div>
+    <div id="chDot"></div>
+    <div id="chArcTop"></div><div id="chArcBot"></div>
+    <div id="chArcLef"></div><div id="chArcRig"></div>
+  </div>
+  <div id="stockCd"></div>
+  <div id="dmgRing">
+    <div class="dmgArc" id="arcUp"></div><div class="dmgArc" id="arcDown"></div>
+    <div class="dmgArc" id="arcLeft"></div><div class="dmgArc" id="arcRight"></div>
+  </div>
+  <div id="killFloat">+50</div>
+  <div id="hintLine">点击画面锁定鼠标 · Esc 释放</div>
+</div>
+
+<div class="overlay" id="hitVignette"></div>
+<div class="overlay" id="lowHpVignette"></div>
+<div class="overlay" id="cameraVignette"></div>
+<div class="overlay" id="sprintRipple"></div>
+<div class="overlay" id="flashlightOverlay"></div>
+
+<div id="scopeOverlay" style="display:none;"><canvas id="scopeCanvas"></canvas><div id="scopeVignette" class="scopeVignette"></div></div>
+<div id="jamIcon" style="display:none;"></div>
+<div id="modeBanner" style="display:none;"></div>
+<div id="boss-announce">⚠️ BOSS 出现！</div>
+
+<div id="cornerHints">
+  <div class="corner tl">WASD 移动 · Shift 冲刺（消耗耐力）</div>
+  <div class="corner tr">Q 左倾 · E 右倾 · Ctrl 蹲伏</div>
+  <div class="corner bl">左键 射击/全自动 · 右键 开镜 · R 换弹</div>
+  <div class="corner br">MB5 主武器&#x2194;手枪&#x2194;刀 · F 搜刮弹药箱 · Space 跳跃</div>
+</div>
+
+<div class="cover" id="loadoutScreen" style="display:none;">
+  <div id="armory">
+    <div id="armoryLeft">
+      <div class="armoryTitle">武 器 库</div>
+      <div id="weaponList"></div>
+      <div class="armoryActions"><div class="armoryEquipBtn" id="armoryEquipBtn">装 备</div><div class="armoryBackBtn" id="armoryBackBtn">&#x2B05; 返 回</div></div>
+    </div>
+    <div id="armoryRight">
+      <div id="weaponPreview"></div>
+      <div id="armoryBottom"><div id="statsPanel"></div><div id="attachmentsPanel"></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="cover" id="startScreen">
+  <div id="menuLeft">
+    <div class="menuTitle">末日突围</div>
+    <div class="menuSub">选择你的模式，进入末日战场</div>
+    <div class="menuGap"></div>
+
+    <div class="menuStartBtn" id="startBtn">&#x2694;&#xFE0F; 进入战场</div>
+    <div class="menuGap"></div>
+    <div class="menuSecBtn" id="loadoutBtn">&#x1F52B; 武器库</div>
+    <div class="menuSecBtn" id="statsBtn">&#x1F4CA; 幸存者档案</div>
+    <div class="menuSub" style="margin-top:14px;">v1.0 · WASD 移动 · MB5 切换武器 · Esc 设置</div>
+  </div>
+</div>
+
+<div id="tutorial" class="cover" style="display:none;">
+  <h2>行动简报</h2>
+  <p>你在废弃的封锁区醒来，尸潮正在逼近。</p>
+  <p>WASD 移动 · Shift 冲刺（消耗耐力，产生巨大噪音惊动僵尸）</p>
+  <p>Ctrl 蹲伏潜行 · Space 跳跃 · Q/E 左右倾斜探头</p>
+  <p>左键 射击 / 步枪全自动 / 狙击半自动 / 持刀挥砍 · 右键 开镜</p>
+  <p>R 换弹 · F 搜刮弹药箱 · MB5 切换武器 · 数字键 1手枪 2主武器 3刀 · I 检视</p>
+  <p>硬核提示：弹药有限，冲刺耗尽耐力后将无法奔跑。爆头双倍伤害。</p>
+  <button id="tutOkBtn">明白，开始战斗！</button>
+</div>
+
+<div id="gameOverScreen" class="cover" style="display:none;">
+  <div class="gd" id="goTitle">YOU DIED</div>
+  <div class="stats" id="goStats"></div>
+  <div class="profile" id="goProfile"></div>
+  <div class="hint">按 空格键 重新开局</div>
+</div>
+
+<div id="settingsScreen" class="cover" style="display:none;">
+  <div class="settingsPanel">
+    <h2>&#x2699;&#xFE0F; 设置</h2>
+    <div class="setRow">
+      <span class="setLabel">鼠标灵敏度</span>
+      <input type="range" id="setSens" min="0.5" max="2.5" step="0.1" value="1.0">
+      <span class="setVal" id="setSensVal">1.0x</span>
+    </div>
+    <div class="setRow">
+      <span class="setLabel">音量</span>
+      <input type="range" id="setVol" min="0" max="100" value="80">
+      <span class="setVal" id="setVolVal">80%</span>
+    </div>
+    <div class="setRow">
+      <span class="setLabel">瞄准辅助</span>
+      <button id="setAssist" style="flex:1;padding:6px;background:#2a2f34;color:#fff;border:1px solid #555;border-radius:6px;cursor:pointer;">关闭</button>
+    </div>
+    <div class="setBtns">
+      <button id="setExitBtn" class="btnDanger">退出当前对局</button>
+      <button id="setCloseBtn">关闭</button>
+    </div>
+  </div>
+</div>
+
+
+<div id="statsScreen" class="cover" style="display:none;"><div id="statsContent"></div><button id="statsCloseBtn">关闭</button><button id="statsResetBtn">重置战绩</button></div>
+<div id="lowPerfDlg" class="cover" style="display:none;"><button id="perfYes">是</button><button id="perfNo">否</button></div>
+
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "./three.js/build/three.module.js",
+    "three/addons/": "./three.js/examples/jsm/"
+  }
+}
+</script>
+
+
+
+<script type="module" src="game.js"></script>
+</body>
+</html>
